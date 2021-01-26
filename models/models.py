@@ -4,9 +4,11 @@ from flask_bcrypt import generate_password_hash
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from database.database import Database
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base  
 
+Base = declarative_base()
 
-class UserModel(Database.Base):
+class UserModel(Base):
     """ User Model for storing user related details """
 
     __tablename__ = "users"
@@ -47,7 +49,7 @@ class UserModel(Database.Base):
     # TODO: Add password recovery mechanism
 
 
-class ActiveTokens(Database.Base):
+class ActiveTokens(Base):
     """Token model for storing the active auth tokens at any given time"""
 
     __tablename__ = "active_tokens"
@@ -75,7 +77,7 @@ class ActiveTokens(Database.Base):
             return False
 
 
-class Metadata(Database.Base):
+class Metadata(Base):
     """ Metadata Model for storing user metadata details """
 
     # TODO: Think about the better name
