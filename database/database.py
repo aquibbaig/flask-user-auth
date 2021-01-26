@@ -14,21 +14,27 @@ class Database:
   def init_engine():
     try:
       # Creates an engine with the URI.
-      return create_engine("postgresql://postgres:pwd@127.0.0.1/testdb")
+      engine = create_engine("postgresql://postgres:pwd@127.0.0.1/testdb")
+      return engine
     except Exception as e:
       print(e)
       print("Error occurred while initialising engine")
       sys.exit(1)
-  
+
   @staticmethod
   def init_db():
     try:
       Database.Base.query = Database.db_session.query_property()
       engine = Database.init_engine()
-      Database.Base.metadata.create_all(bind=engine)
+      Database.Base.metadata.create_all(engine)
       Database.db_session.configure(bind=engine)
 
+      print("===============")
+      print(Database.Base.metadata)
+      print("===============")
+
       print("Connected to db")
-    except Exception:
+    except Exception as e:
+      print(e)
       print("Error occurred while connecting to db.")
       sys.exit(1)

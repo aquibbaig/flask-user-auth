@@ -1,1 +1,20 @@
 Generic single-database configuration.
+
+Some useful commands to run migrations:
+
+Migration commit files are stored in alembic/versions folder.
+
+To create a db migration file
+# alembic revision — autogenerate -m “First commit”
+
+Using the above command alembic generate our first migration commit file in versions folder.
+file names are usually stored as revision_id_<commit_message>.py
+
+Once this file generates we are ready for database migration.
+# alembic upgrade head
+
+To upgrade to specific migration
+# alembic upgrade <revision_id_>
+
+To downgrade to specific migration
+# alembic downgrade <revision_id_>
