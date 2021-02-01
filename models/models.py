@@ -6,9 +6,7 @@ from database.database import Database
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base  
 
-Base = declarative_base()
-
-class UserModel(Base):
+class UserModel(Database.Base):
     """ User Model for storing user related details """
 
     __tablename__ = "users"
@@ -49,7 +47,7 @@ class UserModel(Base):
     # TODO: Add password recovery mechanism
 
 
-class ActiveTokens(Base):
+class ActiveTokens(Database.Base):
     """Token model for storing the active auth tokens at any given time"""
 
     __tablename__ = "active_tokens"
@@ -77,7 +75,7 @@ class ActiveTokens(Base):
             return False
 
 
-class Metadata(Base):
+class Metadata(Database.Base):
     """ Metadata Model for storing user metadata details """
 
     # TODO: Think about the better name

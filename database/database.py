@@ -29,10 +29,6 @@ class Database:
       Database.Base.metadata.create_all(engine)
       Database.db_session.configure(bind=engine)
 
-      print("===============")
-      print(Database.Base.metadata)
-      print("===============")
-
       print("Connected to db")
     except Exception as e:
       print(e)
