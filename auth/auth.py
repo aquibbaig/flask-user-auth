@@ -88,16 +88,16 @@ class Auth:
         """
         try:
           payload = jwt.decode(
-              auth_token,
-              os.getenv("SECRET_KEY", "my_precious"),
-              algorithms="HS256",
+            auth_token,
+            os.getenv("SECRET_KEY", "my_precious"),
+            algorithms="HS256",
           )
           user_id = payload["sub"]
           if ActiveTokens.valid(auth_token):
-              user = UserModel.query.filter_by(id=user_id).first()
-              return user
+            user = UserModel.query.filter_by(id=user_id).first()
+            return user
           return False
-        except jwt.ExpiredSignatureError:
+        except jwt.exceptions.ExpiredSignatureError:
           ActiveTokens.query.filter_by(token=auth_token).delete()
           Database.db_session.commit()
           print(
@@ -105,7 +105,7 @@ class Auth:
               auth_token,
           )
           return False
-        except jwt.InvalidTokenError:
+        except jwt.exceptions.InvalidTokenError:
           print(
               "User attempted invalid Pbench token '{}'", auth_token
           )

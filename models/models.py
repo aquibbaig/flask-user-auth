@@ -4,7 +4,7 @@ from flask_bcrypt import generate_password_hash
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from database.database import Database
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base  
+from sqlalchemy.ext.declarative import declarative_base
 
 class UserModel(Database.Base):
     """ User Model for storing user related details """
@@ -27,7 +27,7 @@ class UserModel(Database.Base):
         self.lastName = kwargs.get("lastName")
         self.password = generate_password_hash(
             kwargs.get("password"), bcrypt_log_rounds
-        )
+        ).decode('utf-8')
         self.email = kwargs.get("email")
         self.registered_on = datetime.datetime.now()
 
