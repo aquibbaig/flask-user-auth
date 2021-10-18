@@ -3,7 +3,7 @@ import jwt
 import os
 from http import HTTPStatus
 from flask_restful import Resource, abort
-from flask import request, jsonify, make_response, app
+from flask import request, jsonify, make_response, current_app
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.models import UserModel, ActiveTokens
@@ -11,17 +11,15 @@ from flask_mail import Mail, Message
 from database.database import Database
 from auth.auth import Auth
 from flask_bcrypt import check_password_hash
-from threading import Thread
 
 class ForgotPassword(Resource):
   def __init__(self, auth):
-    self.mail = Mail(app)
+    self.mail = Mail(current_app)
     self.auth = auth
 
   """
     /forgot_password
   """
-
   def post(self):
     """
     Post request for initiating password recovery.
@@ -43,6 +41,7 @@ class ForgotPassword(Resource):
                 }
     """
     # get the post data
+    print("Here")
     user_data = request.get_json()
     if not user_data:
       print("Invalid json object: {}", request.url)
@@ -55,7 +54,7 @@ class ForgotPassword(Resource):
 
     # Check if email exists in the Db, else abort
     try:
-      user = UserModel.query(email=email)
+      user = UserModel.query.filter_by(email=email).first()
     except Exception:
       print("Exception while querying email")
       abort(HTTPStatus.INTERNAL_SERVER_ERROR, message="INTERNAL ERROR")
@@ -70,13 +69,14 @@ class ForgotPassword(Resource):
     # generate email and send to the user
     # Ideally the message should be a template
     # rendered using render_template
+    body = "Please reset your password at http://localhost:8000/reset_password/" + str(token)
     msg = Message(subject="Reset your password!",
                   sender=os.environ.get('EMAIL_USER'),
                   recipients=[email],
-                  body=("Please reset your password at http://localhost:8000/reset_password/" + token)
+                  body=body
                   )
 
-    Thread(target=self.mail.send(), args=msg).start()
+    self.mail.send(msg)
 
     return "", HTTPStatus.OK
 

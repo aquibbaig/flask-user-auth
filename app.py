@@ -4,7 +4,7 @@ from flask_restful import Resource, Api
 from api.api import RegisterUser, LoginAPI, SendRecoveryEmail, ForgotPassword
 from flask_cors import CORS
 from auth.auth import Auth
-from flask_mail import Mail, Message
+from flask_mail import Mail
  
 from database.database import Database
  
